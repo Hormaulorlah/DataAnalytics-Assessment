@@ -25,3 +25,33 @@ Question 1:  High-Value Customers with Multiple Products
    The schema did not include an explicit "funded" flag. This was addressed by using logical conditions:
    - For savings: `confirmed_amount > 0`
    - For investments: `amount
+
+Question 2: Transaction Frequency Analysis
+
+### ✅ Per-Question Explanation
+
+**Approach:**
+
+- The goal was to determine how frequently customers transact each month, then group them into segments:
+  - High Frequency (≥10 transactions/month)
+  - Medium Frequency (3–9 transactions/month)
+  - Low Frequency (≤2 transactions/month)
+- Used `DATE_FORMAT()` to group transactions by month and customer.
+- Calculated the **average monthly transaction count** per customer using `AVG()`.
+- Categorized customers using a `CASE` statement based on the thresholds.
+- Aggregated results to count the number of customers per segment and calculate the average transaction frequency per segment.
+
+### ⚠️ Challenges
+
+1. **Time-based aggregation**  
+   Monthly grouping required consistent date formatting (`'%Y-%m'`) to avoid mixing years and months.
+
+2. **Handling inactive months**  
+   Customers without activity in a given month do not appear in that month’s data. The average was calculated only over active months, which is a realistic reflection of user behavior.
+
+3. **Ensuring accuracy**  
+   To ensure valid data, filtered transactions by `transaction_status = 'successful'`.
+
+4. **Sorting categories logically**  
+   Used `FIELD()` in the final `ORDER BY` to ensure consistent sorting of frequency categories.
+
